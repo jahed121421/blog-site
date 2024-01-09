@@ -1,0 +1,32 @@
+[
+  {
+    "title": "First Post",
+    "date": "2024-01-08",
+    "content": "This is my first blog post. Welcome to my blog!"
+  },
+  {
+    "title": "Another Post",
+    "date": "2024-01-10",
+    "content": "This is another blog post. I hope you find it interesting."
+  },
+  {
+    "title": "Third Post",
+    "date": "2024-01-15",
+    "content": "Here's the third post. Thanks for reading!"
+  },
+  {
+    "title": "Exploring New Ideas",
+    "date": "2024-01-20",
+    "content": "In this post, I explore some new ideas and share my thoughts on them."
+  },
+  {
+    "title": "Reflecting on the Past",
+    "date": "2024-01-25",
+    "content": "Taking a moment to reflect on the past and lessons learned."
+  },
+  {
+    "title": "A Glimpse into the Future",
+    "date": "2024-02-01",
+    "content": "Looking ahead and sharing my aspirations for the future."
+  }
+]
