@@ -5,10 +5,15 @@ import { useContext, useState } from "react";
 import { CiStar } from "react-icons/ci";
 import { FaStar } from "react-icons/fa";
 import { AuthContext } from "./../AuthProvider/AuthProvider";
+import useSingleBlog from "./../../Hooks/useSingleBlog";
+import LoadingPage from "../Loading Page/LoadingPage";
+
 const SingleBlog = () => {
+  const [SingleBlogData, SingleBlogLoading] = useSingleBlog();
   const [star, setStar] = useState(0);
+  console.log(SingleBlog);
   const favorite = false;
-  const { user } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
   const OnSend = (e) => {
     e.preventDefault();
     const text = e.target.commentbox.value;
@@ -18,6 +23,10 @@ const SingleBlog = () => {
     };
     console.log(data);
   };
+  if (SingleBlogLoading || loading) {
+    return <LoadingPage />;
+  }
+  const { title, content } = SingleBlogData;
 
   return (
     <>
@@ -28,7 +37,11 @@ const SingleBlog = () => {
               <img
                 alt="content"
                 className="h-full w-full object-cover object-center"
-                src="https://dummyimage.com/1200x500"
+                src={
+                  SingleBlogData.img
+                    ? SingleBlogData.img
+                    : "https://dummyimage.com/1200x500"
+                }
               />
             </div>
             <div className="mt-10 flex flex-col sm:flex-row">
@@ -49,7 +62,7 @@ const SingleBlog = () => {
                 </div>
                 <div className="flex flex-col items-center justify-center text-center">
                   <h2 className="title-font mt-4 text-lg font-medium text-gray-900">
-                    Phoebe Caulfield
+                    {user.email || user.displayName}
                   </h2>
                   <div className="mb-4 mt-2 h-1 w-12 rounded bg-indigo-500"></div>
                   <p className="text-base">
@@ -59,18 +72,8 @@ const SingleBlog = () => {
                 </div>
               </div>
               <div className="mt-4 border-t border-gray-200 pt-4 text-center sm:mt-0 sm:w-2/3 sm:border-l sm:border-t-0 sm:py-8 sm:pl-8 sm:text-left">
-                <h1 className="text-4xl font-medium">Title</h1>
-                <p className="mb-4 text-lg leading-relaxed">
-                  Meggings portland fingerstache lyft, post-ironic fixie man bun
-                  banh mi umami everyday carry hexagon locavore direct trade art
-                  party. Locavore small batch listicle gastropub farm-to-table
-                  lumbersexual salvia messenger bag. Coloring book flannel
-                  truffaut craft beer drinking vinegar sartorial, disrupt
-                  fashion axe normcore meh butcher. Portland 90's scenester
-                  vexillologist forage post-ironic asymmetrical, chartreuse
-                  disrupt butcher paleo intelligentsia pabst before they sold
-                  out four loko. 3 wolf moon brooklyn.
-                </p>
+                <h1 className="text-4xl font-medium">{title}</h1>
+                <p className="mb-4 text-lg leading-relaxed">{content}</p>
                 <div>
                   <div className="space-y-3">
                     {favorite ? (
@@ -86,6 +89,9 @@ const SingleBlog = () => {
                     )}
                     {user && (
                       <form onSubmit={OnSend}>
+                        <h2 className="mb-3 text-left font-semibold">
+                          Leave Comment
+                        </h2>
                         <textarea
                           name="commentbox"
                           cols="40"

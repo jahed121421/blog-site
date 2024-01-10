@@ -18,6 +18,20 @@ const Blogs = () => {
   const totalPage = Math.ceil(totalPost / PerPagePost);
   const PageNumber = [...Array(totalPage).keys()];
 
+  if (AllBlog.length === 0 || AllBlogLoading) {
+    return (
+      <>
+        <Titel title="Blog" />
+        <div className="flex h-[500px] w-screen items-center justify-center">
+          <h1 className="text-5xl text-gray-400">No post Found</h1>
+        </div>
+      </>
+    );
+  }
+  if (AllBlogLoading) {
+    return <LoadingPage />;
+  }
+
   return (
     <>
       <Titel title="Blog" />

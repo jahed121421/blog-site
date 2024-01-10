@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const Card = ({ Allblogs, AllBlogLoading }) => {
   const { user, loading } = useContext(AuthContext);
-  const { title, content, date } = Allblogs;
+  const { title, content, date, _id } = Allblogs;
   if (AllBlogLoading || loading) {
     return <LoadingPage />;
   }
@@ -81,7 +81,7 @@ const Card = ({ Allblogs, AllBlogLoading }) => {
           <h1 className="px-2 text-sm">{user.email}</h1>
         </div>
         <div className="mt-4 flex items-center text-gray-700 dark:text-gray-200">
-          <Link to={`/blog/${title}`}>Details</Link>
+          <Link to={`/blog/${_id}`}>Details</Link>
         </div>
       </div>
     </div>

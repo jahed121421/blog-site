@@ -8,7 +8,7 @@ const useAllbolgpost = () => {
   } = useQuery({
     queryKey: ["all-blog"],
     queryFn: async () => {
-      const res = await fetch("./blog.json");
+      const res = await fetch("http://localhost:5000/all-blog");
       return res.json();
     },
   });
