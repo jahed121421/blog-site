@@ -1,27 +1,21 @@
-import axios from "axios";
+import { Link } from "react-router-dom";
 import Button from "../../Components/Button/Button";
-import useAllbolgpost from "../../Hooks/useAllbolgpost";
-import LoadingPage from "./../Loading Page/LoadingPage";
-import { useState } from "react";
-import DeclineModel from "./DeclineModel";
+import useOwnPost from "./../../Hooks/useOwnPost";
+import LoadingPage from "../Loading Page/LoadingPage";
+import axios from "axios";
 
-const ManagePost = () => {
-  const [AllBlog, AllBlogLoading, AllBlogRefetch] = useAllbolgpost();
-  let [isOpen, setIsOpen] = useState(false);
-  let [id, setId] = useState();
-  if (AllBlogLoading) {
+const ManageOwnPost = () => {
+  const [OwnPost, OwnPostLoading, refetch] = useOwnPost();
+  if (OwnPostLoading) {
     return <LoadingPage />;
   }
-  const ApprovedPost = (id) => {
-    console.log(id);
-    axios
-      .put(`http://localhost:5000/appoved-blog/${id}`)
-      .then((res) => {
-        console.log(res);
-        AllBlogRefetch();
-      })
-      .catch((err) => console.log(err));
+
+  const DeletePost = (id) => {
+    axios.delete(`http://localhost:5000/delete-post/${id}`).then((res) => {
+      refetch, console.log(res.data);
+    });
   };
+
   return (
     <>
       <h1 className="py-5 text-xl font-bold uppercase">User list</h1>
@@ -47,40 +41,30 @@ const ManagePost = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {AllBlog.map((blogs, i) => (
+                  {OwnPost.map((datas, i) => (
                     <tr
-                      key={blogs._id}
+                      key={datas._id}
                       className="border-b dark:border-neutral-500"
                     >
                       <td className="whitespace-nowrap px-6 py-4 font-medium">
                         {i + 1}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
-                        {blogs.title}
+                        {datas.title}
                       </td>
-                      <td
-                        className={`${
-                          blogs.status === "appoved"
-                            ? "bg-green-100"
-                            : "bg-red-50"
-                        } whitespace-nowrap px-6 py-4`}
-                      >
-                        {blogs.status}
+                      <td className="whitespace-nowrap px-6 py-4">
+                        {datas.status}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
                         <div className="flex gap-6">
-                          <button
-                            onClick={() => {
-                              setIsOpen(true), setId(blogs._id);
-                            }}
-                          >
-                            Delcine
-                          </button>
-
                           <Button
-                            name="Apporved"
-                            onclick={() => ApprovedPost(blogs._id)}
+                            name="Delete"
+                            onclick={() => DeletePost(datas._id)}
                           />
+
+                          <Link to={`/dashboard/update-post/${datas._id}`}>
+                            <Button name="Update" />
+                          </Link>
                         </div>
                       </td>
                     </tr>
@@ -91,14 +75,8 @@ const ManagePost = () => {
           </div>
         </div>
       </div>
-      <DeclineModel
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        id={id}
-        AllBlogRefetch={AllBlogRefetch}
-      />
     </>
   );
 };
 
-export default ManagePost;
+export default ManageOwnPost;

@@ -43,10 +43,6 @@ const DashBoard = () => {
                 name="Manage Comment"
                 to="/dashboard/manage-comment"
               ></ActiceLink>
-              <ActiceLink
-                name="update"
-                to="/dashboard/update-post/:id"
-              ></ActiceLink>
               <ActiceLink name="Favorit" to="/dashboard/favorit"></ActiceLink>
             </ul>
             <div>

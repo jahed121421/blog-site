@@ -19,7 +19,7 @@ import ManageUser from "./Pages/Manage User/ManageUser.jsx";
 import ManageComment from "./Pages/Manage Comment/ManageComment.jsx";
 import ManageFavorit from "./Pages/Manage Favorit/ManageFavorit.jsx";
 import ManagePost from "./Pages/Manage post/ManagePost.jsx";
-import ManageOwnPost from "./Pages/ManageOwnPost/ManageOwnPost.jsx";
+import ManageOwnPost from "./Pages/Manage Own Post/ManageOwnPost.jsx";
 import UpdatePost from "./Pages/Update post/UpdatePost";
 import DashBoardPage from "./Pages/DashBoard/DashBoardPage.jsx";
 

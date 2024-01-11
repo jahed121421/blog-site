@@ -1,12 +1,15 @@
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import LoadingPage from "./../Loading Page/LoadingPage";
+import { AuthContext } from "../AuthProvider/AuthProvider";
 const AddPost = () => {
+  const { user } = useContext(AuthContext);
+
   const [loading, setLoading] = useState(false);
   const url = `https://api.imgbb.com/1/upload?key=${
     import.meta.env.VITE_ImgBB
   }`;
-  console.log(url);
+
   const SaveDate = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -27,20 +30,23 @@ const AddPost = () => {
             content: blog,
             img: res.data.data.display_url,
             date: new Date(),
+            email: user?.email,
+            status: "pending",
           };
           axios.post("http://localhost:5000/send-blog", data).then((res) => {
             console.log(res.data);
+            form.reset();
             setLoading(false);
           });
         }
       })
 
       .catch((error) => console.error("Error:", error));
-    // form.reset();
   };
   if (loading) {
     return <LoadingPage />;
   }
+
   return (
     <div className="mt-5 w-full ">
       <h1 className=" text-xl font-bold uppercase">Add Post</h1>
