@@ -2,6 +2,8 @@ import { useContext } from "react";
 import { AuthContext } from "../../Pages/AuthProvider/AuthProvider";
 import LoadingPage from "../../Pages/Loading Page/LoadingPage";
 import { Link } from "react-router-dom";
+import Button from "../Button/Button";
+import axios from "axios";
 
 const Card = ({ Allblogs, AllBlogLoading }) => {
   const { user, loading } = useContext(AuthContext);
@@ -9,11 +11,21 @@ const Card = ({ Allblogs, AllBlogLoading }) => {
   if (AllBlogLoading || loading) {
     return <LoadingPage />;
   }
+  const Views = (id) => {
+    axios
+      .put(`http://localhost:5000/increse/${id}`)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err.message));
+  };
   return (
     <div className="mx-auto h-[520px] w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg dark:bg-gray-800">
       <img
         className="h-56 w-full object-cover object-center"
-        src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80"
+        src={
+          Allblogs.img
+            ? Allblogs.img
+            : "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80"
+        }
         alt="avatar"
       />
 
@@ -81,7 +93,9 @@ const Card = ({ Allblogs, AllBlogLoading }) => {
           <h1 className="px-2 text-sm">{user.email}</h1>
         </div>
         <div className="mt-4 flex items-center text-gray-700 dark:text-gray-200">
-          <Link to={`/blog/${_id}`}>Details</Link>
+          <Link to={`/blog/${_id}`}>
+            <Button onclick={() => Views(_id)} name="Details" />
+          </Link>
         </div>
       </div>
     </div>

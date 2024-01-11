@@ -7,13 +7,18 @@ import { FaStar } from "react-icons/fa";
 import { AuthContext } from "./../AuthProvider/AuthProvider";
 import useSingleBlog from "./../../Hooks/useSingleBlog";
 import LoadingPage from "../Loading Page/LoadingPage";
+import axios from "axios";
+import useCheckFevotite from "../../Hooks/useCheckFevorite";
+import { useParams } from "react-router-dom";
 
 const SingleBlog = () => {
+  const { id } = useParams();
   const [SingleBlogData, SingleBlogLoading] = useSingleBlog();
   const [star, setStar] = useState(0);
-  console.log(SingleBlog);
-  const favorite = false;
   const { user, loading } = useContext(AuthContext);
+  const [FevoriteCheck, isLoading, refetch] = useCheckFevotite(id);
+  console.log(FevoriteCheck);
+
   const OnSend = (e) => {
     e.preventDefault();
     const text = e.target.commentbox.value;
@@ -23,11 +28,33 @@ const SingleBlog = () => {
     };
     console.log(data);
   };
-  if (SingleBlogLoading || loading) {
+
+  const AddFavorite = () => {
+    axios
+      .post("http://localhost:5000/add-comment", {
+        menuId: _id,
+        email: user?.email,
+      })
+      .then((res) => {
+        refetch();
+        console.log(res.data);
+      });
+  };
+  const removeFevorite = (id) => {
+    axios
+      .delete(`http://localhost:5000/delete-comment/${id}`)
+      .then((res) => {
+        refetch();
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  if (SingleBlogLoading || loading || isLoading) {
     return <LoadingPage />;
   }
-  const { title, content } = SingleBlogData;
 
+  const { title, content, _id } = SingleBlogData;
   return (
     <>
       <section className="body-font text-gray-600">
@@ -76,13 +103,19 @@ const SingleBlog = () => {
                 <p className="mb-4 text-lg leading-relaxed">{content}</p>
                 <div>
                   <div className="space-y-3">
-                    {favorite ? (
-                      <button className="flex transform items-center gap-4 rounded-lg bg-blue-600 px-6 py-2 font-medium capitalize tracking-wide text-white transition-colors duration-300 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                    {FevoriteCheck ? (
+                      <button
+                        onClick={() => removeFevorite(_id)}
+                        className="flex transform items-center gap-4 rounded-lg bg-blue-600 px-6 py-2 font-medium capitalize tracking-wide text-white transition-colors duration-300 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80"
+                      >
                         Remove Favorite
                         <MdFavorite size={22} />
                       </button>
                     ) : (
-                      <button className="flex transform items-center gap-4 rounded-lg bg-blue-600 px-6 py-2 font-medium capitalize tracking-wide text-white transition-colors duration-300 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                      <button
+                        onClick={() => AddFavorite()}
+                        className="flex transform items-center gap-4 rounded-lg bg-blue-600 px-6 py-2 font-medium capitalize tracking-wide text-white transition-colors duration-300 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80"
+                      >
                         Add to Favorite
                         <MdOutlineFavoriteBorder size={22} />
                       </button>
